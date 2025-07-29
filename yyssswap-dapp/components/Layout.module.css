@@ -1,0 +1,41 @@
+.layout {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #d4f0ce, #f6f7f9);
+}
+
+.header {
+    height: 60px;
+    line-height: 60px;
+    padding-inline: 20px;
+    /* padding-right: 20px; */
+    background-color: #c7f0bd;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid #d7e1eb;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nav {
+    display: flex;
+    gap: 60px;
+}
+
+.nav a {
+    font-size: 14px;
+    opacity: 0.6;
+}
+
+.nav a.active {
+    font-weight: bold;
+    opacity: 1;
+}
+
+.connectTip {
+    padding: 24px;
+    text-align: center;
+  }
