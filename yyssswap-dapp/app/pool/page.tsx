@@ -3,20 +3,11 @@
 import Layout from "@/components/Layout";
 import Link from "next/link";
 import styles from "./pool.module.css";
-import {
-  Card,
-  Table,
-  Flex,
-  Space,
-  Button,
-  TableProps,
-  message,
-  Spin,
-} from "antd";
+import { Card, Table, Flex, Space, Button, TableProps, message } from "antd";
 import React, { useState, useEffect } from "react";
 import AddPoolDrawer from "@/components/AddPoolDrawer";
 import { getTokenInfo, parseBigIntToAmount } from "@/utils/common";
-import { BitcoinCircleColorful, EthereumFilled } from "@ant-design/web3-icons";
+import { EthereumFilled } from "@ant-design/web3-icons";
 
 import { getContractAddress } from "@/utils/getContractAddress";
 import {
@@ -24,96 +15,6 @@ import {
   useWritePoolManagerCreateAndInitializePoolIfNecessary,
 } from "@/utils/contracts";
 
-const columns: TableProps["columns"] = [
-  {
-    title: "Token0",
-    dataIndex: "token0",
-    key: "token0",
-    render: (value: string) => {
-      return (
-        <>
-          <EthereumFilled
-            style={{
-              fontSize: 20,
-            }}
-          />
-          {getTokenInfo(value).name.toString()}
-        </>
-      );
-    },
-  },
-  {
-    title: "Token1",
-    dataIndex: "token1",
-    key: "token1",
-    render: (value: string) => {
-      return (
-        <>
-          <EthereumFilled
-            style={{
-              fontSize: 20,
-            }}
-          />
-          {getTokenInfo(value).name.toString()}
-        </>
-      );
-    },
-  },
-  {
-    title: "Index",
-    dataIndex: "index",
-    key: "index",
-  },
-  {
-    title: "Fee",
-    dataIndex: "fee",
-    key: "fee",
-    render: (value: string) => {
-      return `${parseInt(value) / 10000}%`;
-    },
-  },
-  {
-    title: "FeeProtocol",
-    dataIndex: "feeProtocol",
-    key: "feeProtocol",
-  },
-  {
-    title: "TickLower",
-    dataIndex: "tickLower",
-    key: "tickLower",
-  },
-  {
-    title: "TickUpper",
-    dataIndex: "tickUpper",
-    key: "tickUpper",
-  },
-  {
-    title: "Tick",
-    dataIndex: "tick",
-    key: "tick",
-  },
-  {
-    title: "Price",
-    dataIndex: "sqrtPriceX96",
-    key: "sqrtPriceX96",
-    render: (value: bigint) => {
-      return parseBigIntToAmount(value).toString();
-    },
-  },
-];
-// const data = [
-//   {
-//     token0: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
-//     token1: "0xEcd0D12E21805803f70de03B72B1C162dB0898d9",
-//     index: 0,
-//     fee: 3000,
-//     feeProtocol: 0,
-//     tickLower: -100000,
-//     tickUpper: 100000,
-//     tick: 1000,
-//     sqrtPriceX96: BigInt("7922737261735934252089901697281"),
-//   },
-// ];
 const PoolList: React.FC = () => {
   const [openAddPoolDrawer, setOpenAddPoolDrawer] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -121,9 +22,97 @@ const PoolList: React.FC = () => {
   const { data = [], refetch } = useReadPoolManagerGetAllPools({
     address: getContractAddress("PoolManager"),
   });
-
   const { writeContractAsync } =
     useWritePoolManagerCreateAndInitializePoolIfNecessary();
+
+  const columns: TableProps["columns"] = [
+    {
+      title: "Token0",
+      dataIndex: "token0",
+      key: "token0",
+      ellipsis: true,
+      render: (value: string) => {
+        return (
+          <>
+            <EthereumFilled
+              style={{
+                fontSize: 20,
+              }}
+            />
+            {getTokenInfo(value).name.toString()}
+          </>
+        );
+      },
+    },
+    {
+      title: "Token1",
+      dataIndex: "token1",
+      key: "token1",
+      ellipsis: true,
+      render: (value: string) => {
+        return (
+          <>
+            <EthereumFilled
+              style={{
+                fontSize: 20,
+              }}
+            />
+            {getTokenInfo(value).name.toString()}
+          </>
+        );
+      },
+    },
+    {
+      title: "Index",
+      dataIndex: "index",
+      key: "index",
+    },
+    {
+      title: "Liquidity",
+      dataIndex: "liquidity",
+      key: "liquidity",
+      render: (value: bigint) => {
+        return value.toString();
+      },
+    },
+    {
+      title: "Fee",
+      dataIndex: "fee",
+      key: "fee",
+      render: (value: string) => {
+        return `${parseInt(value) / 10000}%`;
+      },
+    },
+    {
+      title: "FeeProtocol",
+      dataIndex: "feeProtocol",
+      key: "feeProtocol",
+    },
+    {
+      title: "TickLower",
+      dataIndex: "tickLower",
+      key: "tickLower",
+    },
+    {
+      title: "TickUpper",
+      dataIndex: "tickUpper",
+      key: "tickUpper",
+    },
+    {
+      title: "Tick",
+      dataIndex: "tick",
+      key: "tick",
+    },
+    {
+      title: "Price",
+      dataIndex: "sqrtPriceX96",
+      key: "sqrtPriceX96",
+      render: (value: bigint) => {
+        return parseBigIntToAmount(value).toString();
+      },
+    },
+  ];
+
   return (
     <>
       <Card className={styles.poolCard}>
@@ -158,7 +147,6 @@ const PoolList: React.FC = () => {
         onCreatePool={async (createParams) => {
           setLoading(true);
           setOpenAddPoolDrawer(false);
-          console.log(createParams);
           try {
             await writeContractAsync({
               address: getContractAddress("PoolManager"),

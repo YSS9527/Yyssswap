@@ -9,10 +9,10 @@ import {
   Select,
   InputNumber,
   message,
+  Slider,
 } from "antd";
-// import type { FormProps } from "antd";
-import { getContractAddress } from "@/utils/getContractAddress";
-import { parsePriceToSqrtPriceX96 } from "@/utils/common";
+import { getContractAddress, tokens } from "@/utils/getContractAddress";
+import { parsePriceToSqrtPriceX96, getTokenInfo } from "@/utils/common";
 
 interface CreatePoolParams {
   token0: `0x${string}`;
@@ -34,7 +34,7 @@ const AddPoolDrawer = (props: AddPoolDrawerProps) => {
   return (
     <Drawer
       title="Add Pool"
-      width={600}
+      width={500}
       open={open}
       // onClose={onCancel}
       closeIcon={false}
@@ -45,9 +45,15 @@ const AddPoolDrawer = (props: AddPoolDrawerProps) => {
             type="primary"
             onClick={async () => {
               const values = await form.validateFields().then((values) => {
-                if (values.token0 >= values.token1) {
-                  message.error("Token0 should be less than Token1");
+                if (values.token0 == values.token1) {
+                  message.error("Token0 and Token1 need to be different");
                   return false;
+                }
+                if (values.token0 > values.token1) {
+                  [values.token0, values.token1] = [
+                    values.token1,
+                    values.token0,
+                  ];
                 }
                 onCreatePool({
                   ...values,
@@ -74,10 +80,11 @@ const AddPoolDrawer = (props: AddPoolDrawerProps) => {
         }}
       >
         <Form.Item required label="Token 0" name="token0">
-          <Input />
+          {/* <Input /> */}
+          <Select options={tokens} />
         </Form.Item>
         <Form.Item rules={[{ required: true }]} label="Token 1" name="token1">
-          <Input />
+          <Select options={tokens} />
         </Form.Item>
         <Form.Item required label="Fee" name="fee">
           <Select
@@ -90,17 +97,37 @@ const AddPoolDrawer = (props: AddPoolDrawerProps) => {
             ]}
           />
         </Form.Item>
-        <Form.Item required label="Tick Lower" name="tickLower">
-          <InputNumber />
+        <Form.Item
+        //  required label="Tick"
+        >
+          <Form.Item
+            label="Tick Lower"
+            name="tickLower"
+            required
+            style={{ display: "inline-block", width: "calc(50%)" }}
+          >
+            <InputNumber
+              style={{ width: "90%" }}
+              placeholder="Input Tick Lower"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Tick Upper"
+            name="tickUpper"
+            required
+            style={{
+              display: "inline-block",
+              width: "calc(50%)",
+            }}
+          >
+            <InputNumber
+              style={{ width: "90%" }}
+              placeholder="Input Tick Upper"
+            />
+          </Form.Item>
         </Form.Item>
-        <Form.Item required label="Tick Upper" name="tickUpper">
-          <InputNumber />
-        </Form.Item>
-        {/* <Form.Item required label="SqrtPriceX96" name="sqrtPriceX96">
-          <InputNumber />
-        </Form.Item> */}
         <Form.Item required label="Init Price(token1/token0)" name="price">
-          <InputNumber min={0.000001} max={1000000} />
+          <Slider min={0.000001} max={1000000} />
         </Form.Item>
       </Form>
     </Drawer>

@@ -1,8 +1,16 @@
 "use client";
 
-import { Drawer, Space, Button, Form, Input, Select, InputNumber } from "antd";
-import type { FormProps } from "antd";
-
+import {
+  Drawer,
+  Space,
+  Button,
+  Form,
+  Input,
+  Select,
+  InputNumber,
+  message,
+} from "antd";
+import { getContractAddress, tokens } from "@/utils/getContractAddress";
 interface CreatePositionParams {
   token0: string;
   token1: string;
@@ -15,25 +23,16 @@ interface CreatePositionParams {
 interface AddPositionDrawerProps {
   open: boolean;
   onCancel: () => void;
-  onCreatePool: (params: CreatePositionParams) => void;
+  onCreatePosition: (params: CreatePositionParams) => void;
 }
-const onFinish: FormProps<CreatePositionParams>["onFinish"] = (values) => {
-  console.log();
-  console.log("Success:", values);
-};
-const onFinishFailed: FormProps<CreatePositionParams>["onFinishFailed"] = (
-  errorInfo
-) => {
-  console.log("Failed:", errorInfo);
-};
 
 const AddPositionDrawer = (props: AddPositionDrawerProps) => {
-  const { open, onCancel, onCreatePool } = props;
+  const { open, onCancel, onCreatePosition } = props;
   const [form] = Form.useForm();
   return (
     <Drawer
-      title="Add Pool"
-      width={600}
+      title="Add Position"
+      width={500}
       open={open}
       // onClose={onCancel}
       closeIcon={false}
@@ -42,16 +41,24 @@ const AddPositionDrawer = (props: AddPositionDrawerProps) => {
           <Button onClick={onCancel}>Cancel</Button>
           <Button
             type="primary"
-            onClick={() => {
-              console.log("点击提交");
-              onCreatePool({
-                token0: "1",
-                token1: "1",
-                index: 1,
-                amount0Desired: BigInt(1),
-                amount1Desired: BigInt(1),
-                recipient: "string",
-                deadline: BigInt(1),
+            onClick={async () => {
+              await form.validateFields().then((values) => {
+                if (values.token0 == values.token1) {
+                  message.error("Token0 and Token1 need to be different");
+                  return false;
+                }
+                if (values.token0 > values.token1) {
+                  [values.token0, values.token1] = [
+                    values.token1,
+                    values.token0,
+                  ];
+                }
+                onCreatePosition({
+                  ...values,
+                  amount0Desired: BigInt(values.amount0Desired),
+                  amount1Desired: BigInt(values.amount1Desired),
+                  deadline: BigInt(Date.now() + 100000),
+                });
               });
             }}
           >
@@ -63,20 +70,28 @@ const AddPositionDrawer = (props: AddPositionDrawerProps) => {
       <Form
         layout="vertical"
         form={form}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        initialValues={{
+          token0: getContractAddress("DebugTokenA"),
+          token1: getContractAddress("DebugTokenB"),
+          index: 0,
+          amount0Desired: "1000",
+          amount1Desired: "1000",
+        }}
       >
         <Form.Item required label="Token 0" name="token0">
-          <Input />
+          <Select onChange={() => {}} options={tokens} />
         </Form.Item>
         <Form.Item required label="Token 1" name="token1">
-          <Input />
+          <Select options={tokens} />
+        </Form.Item>
+        <Form.Item required label="Pool Index" name="index">
+          <InputNumber min={0} style={{ width: "80%" }} />
         </Form.Item>
         <Form.Item required label="Amount0 Desired" name="amount0Desired">
-          <Input />
+          <Input style={{ width: "80%" }} />
         </Form.Item>
         <Form.Item required label="Amount1 Desired" name="amount1Desired">
-          <Input />
+          <Input style={{ width: "80%" }} />
         </Form.Item>
       </Form>
     </Drawer>

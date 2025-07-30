@@ -28,7 +28,9 @@ const LayoutContent: React.FC<LayoutProps> = ({ children }) => {
   }, []);
 
   if (loading || !address) {
-    return <div className={styles.connectTip}>Please Connect Wallet First.</div>;
+    return (
+      <div className={styles.connectTip}>Please Connect Wallet First.</div>
+    );
   }
   return <>{children}</>;
 };
@@ -40,7 +42,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         autoAddInjectedWallets: true,
       }}
       ens
-      chains={[Mainnet, Localhost, Sepolia]}
+      chains={[Localhost, Sepolia, Mainnet]}
       transports={{
         [Localhost.id]: http("http://127.0.0.1:8545"),
         [Sepolia.id]: http("https://api.zan.top/public/eth-sepolia"),

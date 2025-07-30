@@ -40,3 +40,18 @@ export const getContractAddress = (
   }
   throw new Error("Invalid contract");
 };
+
+export const tokens = [
+  {
+    value: "0x081a4A615a48A17e321804c5C3852E94ACB0C969",
+    label: "DebugTokenA",
+  },
+  {
+    value: "0x333377c2e62A7b836AC707ae9a51C9ef4B748Afb",
+    label: "DebugTokenB",
+  },
+  {
+    value: "0x650c2349aC2f162C9AFFb7d1Fb791CFb77b81EF1",
+    label: "DebugTokenC",
+  },
+];
