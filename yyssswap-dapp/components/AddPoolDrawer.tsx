@@ -133,8 +133,8 @@ const AddPoolDrawer = (props: AddPoolDrawerProps) => {
             />
           </Form.Item>
         </Form.Item>
-        <Form.Item required label="Price(token1/token0)" name="price">
-          <Slider min={0.000001} max={1000000} />
+        <Form.Item required label="Price(Token1/Token0)" name="price">
+          <Slider min={1} max={100000} />
         </Form.Item>
       </Form>
     </Drawer>

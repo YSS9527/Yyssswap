@@ -1,4 +1,3 @@
-// "use client";
 import { type Token } from "@ant-design/web3";
 import { useTokenAddress } from "@/utils/common";
 import { useReadErc20BalanceOf } from "@/utils/contracts";
@@ -14,7 +13,7 @@ export default function Balance(props: { token?: Token }) {
     args: [address as `0x${string}`],
     query: {
       enabled: !!tokenAddress,
-      refetchInterval: 3000,
+      refetchInterval: 5000,
     },
   });
   return balance === undefined ? (
@@ -25,6 +24,7 @@ export default function Balance(props: { token?: Token }) {
         value={balance}
         symbol={token?.symbol}
         decimals={0}
+        // decimals={props.token?.decimal}
         // fixed={2}
       />
     </>

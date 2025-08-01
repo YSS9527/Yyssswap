@@ -40,6 +40,7 @@ const PositionsList: React.FC = () => {
       title: "Id",
       dataIndex: "id",
       key: "id",
+      fixed: "left",
       render: (value: bigint) => {
         return value.toString();
       },
@@ -49,12 +50,15 @@ const PositionsList: React.FC = () => {
       dataIndex: "owner",
       key: "owner",
       ellipsis: true,
+      fixed: "left",
+      width: 150,
     },
     {
       title: "Token0",
       dataIndex: "token0",
       key: "token0",
       ellipsis: true,
+      width: 150,
       render: (value: string) => {
         return (
           <>
@@ -73,6 +77,7 @@ const PositionsList: React.FC = () => {
       dataIndex: "token1",
       key: "token1",
       ellipsis: true,
+      width: 150,
       render: (value: string) => {
         return (
           <>
@@ -150,6 +155,7 @@ const PositionsList: React.FC = () => {
       },
     },
     {
+      fixed: "right",
       title: "Actions",
       key: "actions",
       render: (value, item) => {
@@ -237,9 +243,9 @@ const PositionsList: React.FC = () => {
         //     </>
         //   );
         // }}
-        scroll={{ x: true }}
         columns={columns}
         dataSource={data}
+        scroll={{ x: true }}
       ></Table>
       <AddPositionDrawer
         open={openAddPositionDrawer}

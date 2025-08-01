@@ -42,7 +42,8 @@ export const computeSqrtPriceLimitX96 = (
     tick: number;
     sqrtPriceX96: bigint;
   }[],
-  zeroForOne: boolean
+  zeroForOne: boolean,
+  slippage: number
 ): bigint => {
   if (zeroForOne) {
     let minTickPool = pools[0];
@@ -52,7 +53,7 @@ export const computeSqrtPriceLimitX96 = (
       }
     }
     const minTick = minTickPool.tick ?? TickMath.MIN_TICK;
-    const limitTick = Math.max(minTick - 10000, TickMath.MIN_TICK);
+    const limitTick = Math.max(minTick * (1 - slippage), TickMath.MIN_TICK);
     return BigInt(TickMath.getSqrtRatioAtTick(limitTick).toString());
   } else {
     let maxTickPool = pools[0];
@@ -62,7 +63,7 @@ export const computeSqrtPriceLimitX96 = (
       }
     }
     const maxTick = maxTickPool.tick ?? TickMath.MAX_TICK;
-    const limitTick = Math.min(maxTick + 10000, TickMath.MAX_TICK);
+    const limitTick = Math.min(maxTick * (1 + slippage), TickMath.MAX_TICK);
     return BigInt(TickMath.getSqrtRatioAtTick(limitTick).toString());
   }
 };

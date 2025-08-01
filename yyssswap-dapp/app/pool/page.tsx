@@ -26,11 +26,21 @@ const PoolList: React.FC = () => {
     useWritePoolManagerCreateAndInitializePoolIfNecessary();
 
   const columns: TableProps["columns"] = [
+    // {
+    //   title: "Pool",
+    //   dataIndex: "pool",
+    //   key: "pool",
+    //   ellipsis: true,
+    //   fixed: "left",
+    //   width: 150,
+    // },
     {
       title: "Token0",
       dataIndex: "token0",
       key: "token0",
+      width: 150,
       ellipsis: true,
+      fixed: "left",
       render: (value: string) => {
         return (
           <>
@@ -49,6 +59,8 @@ const PoolList: React.FC = () => {
       dataIndex: "token1",
       key: "token1",
       ellipsis: true,
+      width: 150,
+      fixed: "left",
       render: (value: string) => {
         return (
           <>
@@ -107,9 +119,12 @@ const PoolList: React.FC = () => {
       title: "Price",
       dataIndex: "sqrtPriceX96",
       key: "sqrtPriceX96",
+      ellipsis: true,
+      width: 150,
       render: (value: bigint) => {
-        return parseBigIntToAmount(value).toString();
+        return value.toString();
       },
+      fixed: "right",
     },
   ];
 
@@ -147,9 +162,9 @@ const PoolList: React.FC = () => {
           //     </Space>
           //   </Flex>
           // )}
-          scroll={{ x: true }}
           columns={columns}
           dataSource={data}
+          scroll={{ x: true }}
         />
       </Card>
       <AddPoolDrawer
