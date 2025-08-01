@@ -6,10 +6,10 @@ import styles from "./pool.module.css";
 import { Card, Table, Flex, Space, Button, TableProps, message } from "antd";
 import React, { useState, useEffect } from "react";
 import AddPoolDrawer from "@/components/AddPoolDrawer";
-import { getTokenInfo, parseBigIntToAmount } from "@/utils/common";
+import { parseBigIntToAmount } from "@/utils/common";
 import { EthereumFilled } from "@ant-design/web3-icons";
 
-import { getContractAddress } from "@/utils/getContractAddress";
+import { getContractAddress, getTokenInfo } from "@/utils/contractsInfo";
 import {
   useReadPoolManagerGetAllPools,
   useWritePoolManagerCreateAndInitializePoolIfNecessary,
@@ -115,25 +115,38 @@ const PoolList: React.FC = () => {
 
   return (
     <>
-      <Card className={styles.poolCard}>
+      <Card
+        title={
+          <Flex justify="space-between">
+            <div>PoolList</div>
+            <Space>
+              <Button
+                loading={loading}
+                type="primary"
+                onClick={() => setOpenAddPoolDrawer(true)}
+              >
+                Add Pool
+              </Button>
+            </Space>
+          </Flex>
+        }
+        className={styles.poolCard}
+      >
         <Table
-          title={() => (
-            <Flex justify="space-between">
-              <div>PoolList</div>
-              <Space>
-                {/* <Link href="/positions">
-                  <Button>MyPositions</Button>
-                </Link> */}
-                <Button
-                  loading={loading}
-                  type="primary"
-                  onClick={() => setOpenAddPoolDrawer(true)}
-                >
-                  Add Pool
-                </Button>
-              </Space>
-            </Flex>
-          )}
+          // title={() => (
+          //   <Flex justify="space-between">
+          //     <div>PoolList</div>
+          //     <Space>
+          //       <Button
+          //         loading={loading}
+          //         type="primary"
+          //         onClick={() => setOpenAddPoolDrawer(true)}
+          //       >
+          //         Add Pool
+          //       </Button>
+          //     </Space>
+          //   </Flex>
+          // )}
           scroll={{ x: true }}
           columns={columns}
           dataSource={data}

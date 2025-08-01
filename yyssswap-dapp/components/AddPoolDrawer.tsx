@@ -11,9 +11,14 @@ import {
   message,
   Slider,
 } from "antd";
-import { getContractAddress, tokens } from "@/utils/getContractAddress";
-import { parsePriceToSqrtPriceX96, getTokenInfo } from "@/utils/common";
-
+import {
+  getContractAddress,
+  tokens,
+  getTokenInfo,
+  builtInTokens
+} from "@/utils/contractsInfo";
+import { parsePriceToSqrtPriceX96 } from "@/utils/common";
+import { TokenSelect, type Token } from "@ant-design/web3";
 interface CreatePoolParams {
   token0: `0x${string}`;
   token1: `0x${string}`;
@@ -82,9 +87,11 @@ const AddPoolDrawer = (props: AddPoolDrawerProps) => {
         <Form.Item required label="Token 0" name="token0">
           {/* <Input /> */}
           <Select options={tokens} />
+          {/* <TokenSelect options={builtInTokens}/> */}
         </Form.Item>
         <Form.Item rules={[{ required: true }]} label="Token 1" name="token1">
           <Select options={tokens} />
+          {/* <TokenSelect options={builtInTokens}/> */}
         </Form.Item>
         <Form.Item required label="Fee" name="fee">
           <Select
@@ -101,18 +108,18 @@ const AddPoolDrawer = (props: AddPoolDrawerProps) => {
         //  required label="Tick"
         >
           <Form.Item
-            label="Tick Lower"
+            label="TickLower"
             name="tickLower"
             required
             style={{ display: "inline-block", width: "calc(50%)" }}
           >
             <InputNumber
               style={{ width: "90%" }}
-              placeholder="Input Tick Lower"
+              placeholder="Input TickLower"
             />
           </Form.Item>
           <Form.Item
-            label="Tick Upper"
+            label="TickUpper"
             name="tickUpper"
             required
             style={{
@@ -122,11 +129,11 @@ const AddPoolDrawer = (props: AddPoolDrawerProps) => {
           >
             <InputNumber
               style={{ width: "90%" }}
-              placeholder="Input Tick Upper"
+              placeholder="Input TickUpper"
             />
           </Form.Item>
         </Form.Item>
-        <Form.Item required label="Init Price(token1/token0)" name="price">
+        <Form.Item required label="Price(token1/token0)" name="price">
           <Slider min={0.000001} max={1000000} />
         </Form.Item>
       </Form>

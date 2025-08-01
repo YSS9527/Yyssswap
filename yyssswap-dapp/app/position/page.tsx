@@ -7,7 +7,7 @@ import styles from "./positions.module.css";
 import type { TableProps } from "antd";
 import AddPositionDrawer from "@/components/AddPositionDrawer";
 import { EthereumFilled } from "@ant-design/web3-icons";
-import { getTokenInfo, parseBigIntToAmount } from "@/utils/common";
+import { parseBigIntToAmount } from "@/utils/common";
 
 import {
   useReadPositionManagerGetAllPositions,
@@ -16,7 +16,7 @@ import {
   useWritePositionManagerBurn,
   useWritePositionManagerCollect,
 } from "@/utils/contracts";
-import { getContractAddress } from "@/utils/getContractAddress";
+import { getContractAddress, getTokenInfo } from "@/utils/contractsInfo";
 import { useAccount } from "@ant-design/web3";
 
 const PositionsList: React.FC = () => {
@@ -37,14 +37,21 @@ const PositionsList: React.FC = () => {
 
   const columns: TableProps["columns"] = [
     {
+      title: "Id",
+      dataIndex: "id",
+      key: "id",
+      render: (value: bigint) => {
+        return value.toString();
+      },
+    },
+    {
       title: "Owner",
       dataIndex: "owner",
       key: "owner",
-      width: 100,
       ellipsis: true,
     },
     {
-      title: "Token 0",
+      title: "Token0",
       dataIndex: "token0",
       key: "token0",
       ellipsis: true,
@@ -62,7 +69,7 @@ const PositionsList: React.FC = () => {
       },
     },
     {
-      title: "Token 1",
+      title: "Token1",
       dataIndex: "token1",
       key: "token1",
       ellipsis: true,
@@ -101,17 +108,17 @@ const PositionsList: React.FC = () => {
       },
     },
     {
-      title: "Tick Lower",
+      title: "TickLower",
       dataIndex: "tickLower",
       key: "tickLower",
     },
     {
-      title: "Tick Upper",
+      title: "TickUpper",
       dataIndex: "tickUpper",
       key: "tickUpper",
     },
     {
-      title: "Tokens Owed 0",
+      title: "TokensOwed0",
       dataIndex: "tokensOwed0",
       key: "tokensOwed0",
       render: (value: bigint) => {
@@ -119,7 +126,7 @@ const PositionsList: React.FC = () => {
       },
     },
     {
-      title: "Tokens Owed 1",
+      title: "TokensOwed1",
       dataIndex: "tokensOwed1",
       key: "tokensOwed1",
       render: (value: bigint) => {
@@ -127,7 +134,7 @@ const PositionsList: React.FC = () => {
       },
     },
     {
-      title: "Fee Growth Inside 0",
+      title: "FeeGrowthInside0",
       dataIndex: "feeGrowthInside0LastX128",
       key: "feeGrowthInside0LastX128",
       render: (value: bigint) => {
@@ -135,7 +142,7 @@ const PositionsList: React.FC = () => {
       },
     },
     {
-      title: "Fee Growth Inside 1",
+      title: "FeeGrowthInside1",
       dataIndex: "feeGrowthInside1LastX128",
       key: "feeGrowthInside1LastX128",
       render: (value: bigint) => {
@@ -194,26 +201,42 @@ const PositionsList: React.FC = () => {
   ];
 
   return (
-    <Card className={styles.positionsList}>
+    <Card
+      title={
+        <Flex justify="space-between">
+          <span>PositionList</span>
+          <Space>
+            <Button
+              type="primary"
+              onClick={() => setOpenAddPositionDrawer(true)}
+              loading={loading}
+            >
+              Add Position
+            </Button>
+          </Space>
+        </Flex>
+      }
+      className={styles.positionsList}
+    >
       <Table
-        title={() => {
-          return (
-            <>
-              <Flex justify="space-between">
-                <span> My Positions</span>
-                <Space>
-                  <Button
-                    type="primary"
-                    onClick={() => setOpenAddPositionDrawer(true)}
-                    loading={loading}
-                  >
-                    Add Position
-                  </Button>
-                </Space>
-              </Flex>
-            </>
-          );
-        }}
+        // title={() => {
+        //   return (
+        //     <>
+        //       <Flex justify="space-between">
+        //         <span>PositionList</span>
+        //         <Space>
+        //           <Button
+        //             type="primary"
+        //             onClick={() => setOpenAddPositionDrawer(true)}
+        //             loading={loading}
+        //           >
+        //             Add Position
+        //           </Button>
+        //         </Space>
+        //       </Flex>
+        //     </>
+        //   );
+        // }}
         scroll={{ x: true }}
         columns={columns}
         dataSource={data}
@@ -224,7 +247,7 @@ const PositionsList: React.FC = () => {
           setOpenAddPositionDrawer(false);
         }}
         onCreatePosition={async (createParams) => {
-          console.log("createParams", {
+          console.log({
             ...createParams,
             recipient: account?.address as `0x${string}`,
           });
@@ -257,7 +280,6 @@ const PositionsList: React.FC = () => {
             message.success("Add Position Success");
             refetch();
           } catch (error: any) {
-            console.log(error);
             message.error(error.message);
           } finally {
             setLoading(false);

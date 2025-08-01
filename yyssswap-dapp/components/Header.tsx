@@ -40,14 +40,14 @@ const Header = () => {
             Pool
           </Link>
           <Link
-            href="/positions"
+            href="/position"
             className={
-              pathname == "/positions"
+              pathname == "/position"
                 ? styles.active
                 : undefined
             }
           >
-            MyPositions
+            Position
           </Link>
         </div>
         <div>

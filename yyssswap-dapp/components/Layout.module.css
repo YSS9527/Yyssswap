@@ -1,5 +1,6 @@
 .layout {
     min-height: 100vh;
+    margin: -8px;
     background: linear-gradient(to bottom, #d4f0ce, #f6f7f9);
 }
 
@@ -38,4 +39,4 @@
 .connectTip {
     padding: 24px;
     text-align: center;
-  }
+}

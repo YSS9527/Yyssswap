@@ -1,5 +1,5 @@
 .swapCard {
-    width: 800px;
+    width: 600px;
     /* margin: 0 auto; */
     position: absolute;
     top: 50%;
@@ -11,7 +11,7 @@
     font-size: '20px';
     display: flex;
     justify-content: center;
-    margin: 16px 0;
+    margin: 10px 0;
 }
 
 .swapSpace {

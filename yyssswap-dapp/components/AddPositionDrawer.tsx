@@ -10,7 +10,7 @@ import {
   InputNumber,
   message,
 } from "antd";
-import { getContractAddress, tokens } from "@/utils/getContractAddress";
+import { getContractAddress, tokens } from "@/utils/contractsInfo";
 interface CreatePositionParams {
   token0: string;
   token1: string;
@@ -78,19 +78,19 @@ const AddPositionDrawer = (props: AddPositionDrawerProps) => {
           amount1Desired: "1000",
         }}
       >
-        <Form.Item required label="Token 0" name="token0">
+        <Form.Item required label="Token0" name="token0">
           <Select onChange={() => {}} options={tokens} />
         </Form.Item>
-        <Form.Item required label="Token 1" name="token1">
+        <Form.Item required label="Token1" name="token1">
           <Select options={tokens} />
         </Form.Item>
-        <Form.Item required label="Pool Index" name="index">
+        <Form.Item required label="PoolIndex" name="index">
           <InputNumber min={0} style={{ width: "80%" }} />
         </Form.Item>
-        <Form.Item required label="Amount0 Desired" name="amount0Desired">
+        <Form.Item required label="Amount0Desired" name="amount0Desired">
           <Input style={{ width: "80%" }} />
         </Form.Item>
-        <Form.Item required label="Amount1 Desired" name="amount1Desired">
+        <Form.Item required label="Amount1Desired" name="amount1Desired">
           <Input style={{ width: "80%" }} />
         </Form.Item>
       </Form>
